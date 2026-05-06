@@ -236,43 +236,147 @@ nav {
 }
 
 /* ═══════════════════════════════════════════
-   HERO
+   HERO — BANNER VERSION
 ═══════════════════════════════════════════ */
 #hero {
   min-height: 100vh;
   padding-top: 58px;
-  display: grid;
-  grid-template-columns: 54% 46%;
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
   position: relative; overflow: hidden;
-  background:
-    radial-gradient(ellipse 70% 90% at 20% 70%, rgba(232,0,45,.08) 0%, transparent 65%),
-    radial-gradient(ellipse 40% 40% at 85% 20%, rgba(100,0,200,.04) 0%, transparent 60%),
-    var(--black);
 }
 
-/* Left panel */
-.hero-left {
-  display: flex; flex-direction: column; justify-content: center;
-  padding: 5rem 3rem 5rem 5.5rem;
-  position: relative; z-index: 2;
-}
-
-/* Vertical red bar */
-.hero-left::before {
-  content: ''; position: absolute;
-  left: 0; top: 10%; bottom: 10%; width: 6px;
-  background: linear-gradient(to bottom, transparent, var(--red) 20%, var(--red) 80%, transparent);
-}
-
-.hero-eyebrow {
-  font-family: var(--font-mono);
-  font-size: .6rem; letter-spacing: .42em;
-  color: var(--red); margin-bottom: 1.8rem;
+/* 배너 이미지 배경 */
+.hero-banner-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  z-index: 0;
   opacity: 0;
-  animation: eyebrowAnim .8s ease .25s forwards;
+  animation: fadeUp .8s ease .2s forwards;
 }
 
-/* Calligraphy SVG top */
+/* 하단 그라디언트 페이드 */
+#hero::after {
+  content: '';
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 45%;
+  background: linear-gradient(to bottom, transparent, var(--black));
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 좌측 그라디언트 */
+#hero::before {
+  content: '';
+  position: absolute; top: 0; left: 0; bottom: 0;
+  width: 30%;
+  background: linear-gradient(to right, rgba(8,0,13,.6), transparent);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 하단 콘텐츠 영역 */
+.hero-bottom {
+  position: relative; z-index: 2;
+  padding: 0 5.5rem 4rem;
+  display: flex; align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.hero-bottom-left {
+  display: flex; flex-direction: column; gap: 1.2rem;
+}
+
+/* 좌측 세로 바 */
+.hero-bottom-left::before {
+  content: ''; position: absolute;
+  left: 4rem; bottom: 4rem; top: 58px;
+  width: 5px;
+  background: linear-gradient(to bottom, transparent, var(--red) 30%, var(--red) 85%, transparent);
+  z-index: 0;
+}
+
+.hero-tagline {
+  font-family: var(--font-serif);
+  font-size: 1rem; font-weight: 300;
+  line-height: 2.1; color: rgba(245,240,235,.55);
+  opacity: 0;
+  animation: fadeUp .6s ease .6s forwards;
+}
+
+.hero-cta {
+  display: inline-flex; align-items: center; gap: .9rem;
+  background: var(--red); color: var(--black);
+  font-family: var(--font-display);
+  font-style: italic; font-size: .95rem;
+  letter-spacing: .1em;
+  padding: .9rem 2.4rem;
+  text-decoration: none;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+  transition: background .2s, transform .15s, box-shadow .2s;
+  opacity: 0;
+  animation: fadeUp .6s ease .8s forwards;
+  cursor: none;
+  width: fit-content;
+}
+.hero-cta:hover {
+  background: var(--gold);
+  transform: translateX(6px);
+  box-shadow: -6px 0 20px rgba(232,0,45,.3);
+}
+
+/* 우측 HUD 정보 */
+.hero-bottom-right {
+  display: flex; flex-direction: column; gap: 3px;
+  min-width: 220px;
+  opacity: 0;
+  animation: fadeUp .6s ease .9s forwards;
+}
+
+.hero-info-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: .55rem 1rem;
+  background: rgba(8,0,13,.55);
+  border-left: 3px solid rgba(232,0,45,.4);
+  backdrop-filter: blur(4px);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+}
+.hero-info-label {
+  font-family: var(--font-mono);
+  font-size: .52rem; letter-spacing: .22em;
+  color: rgba(245,240,235,.3); text-transform: uppercase;
+}
+.hero-info-val {
+  font-family: var(--font-cond);
+  font-weight: 900; font-style: italic;
+  font-size: .95rem; color: rgba(245,240,235,.7);
+  letter-spacing: .04em;
+}
+
+/* 스파크 장식 */
+.title-spark {
+  position: absolute;
+  pointer-events: none;
+  animation: sparkFlicker 2.5s ease-in-out infinite;
+}
+.title-spark--tr {
+  width: 44px; height: 44px;
+  top: -10px; right: -18px;
+  animation-delay: 0s;
+}
+.title-spark--bl {
+  width: 28px; height: 28px;
+  bottom: 2px; left: 8px;
+  animation-delay: 1.2s;
+}
+@keyframes sparkFlicker {
+  0%,100% { opacity: .9; transform: scale(1) rotate(0deg); }
+  30%      { opacity: .4; transform: scale(.85) rotate(8deg); }
+  60%      { opacity: 1;  transform: scale(1.1) rotate(-4deg); }
+}
 .calli-top {
   width: 250px; height: 38px;
   margin-bottom: .6rem;
@@ -285,6 +389,7 @@ nav {
   line-height: .86; margin-bottom: .8rem;
   opacity: 0;
   animation: slamIn .6s cubic-bezier(.22,1,.36,1) .55s forwards;
+  position: relative;
 }
 
 .title-persona {
@@ -293,8 +398,15 @@ nav {
   font-size: clamp(3.2rem, 8.5vw, 7.8rem);
   font-style: italic; letter-spacing: -.02em;
   color: var(--white);
-  text-shadow: 0 0 60px rgba(232,0,45,.12);
+  /* 입체 그림자 레이어 */
+  text-shadow:
+    3px 3px 0 #000,
+    6px 6px 0 rgba(0,0,0,.6),
+    9px 9px 0 rgba(0,0,0,.3),
+    0 0 40px rgba(232,0,45,.25);
+  -webkit-text-stroke: 1px rgba(0,0,0,.4);
 }
+
 .title-the {
   display: block;
   font-family: var(--font-cond);
@@ -304,15 +416,55 @@ nav {
   color: rgba(245,240,235,.38);
   padding-left: .12em;
 }
+
+/* HOPE — 골드 그라디언트 + 입체감 */
 .title-hope {
   display: block;
   font-family: var(--font-display);
   font-size: clamp(3.8rem, 10.5vw, 9.5rem);
   font-style: italic; letter-spacing: -.03em;
-  -webkit-text-stroke: 2.5px var(--red);
-  color: transparent;
   line-height: .84;
-  filter: drop-shadow(0 0 24px rgba(232,0,45,.2));
+  position: relative;
+
+  /* 골드 그라디언트 */
+  background: linear-gradient(
+    160deg,
+    #fff8e0 0%,
+    #ffd000 18%,
+    #c8860a 38%,
+    #ffd000 52%,
+    #8a5a00 68%,
+    #ffd000 82%,
+    #fff3c0 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  /* 입체 그림자 */
+  filter:
+    drop-shadow(4px 4px 0px #000)
+    drop-shadow(8px 8px 0px rgba(0,0,0,.5))
+    drop-shadow(0 0 30px rgba(255,208,0,.35))
+    drop-shadow(0 0 60px rgba(232,0,45,.2));
+}
+
+/* 글로우 스파크 레이어 */
+.title-hope::after {
+  content: 'HOPE';
+  position: absolute; top: 0; left: 0;
+  font-family: var(--font-display);
+  font-size: inherit;
+  font-style: italic; letter-spacing: -.03em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,220,80,.3);
+  filter: blur(8px);
+  pointer-events: none;
+  animation: hopeGlow 3s ease-in-out infinite;
+}
+@keyframes hopeGlow {
+  0%,100% { opacity: .4; }
+  50%      { opacity: .9; }
 }
 
 /* Calligraphy SVG bottom */
@@ -1613,14 +1765,280 @@ footer p {
 }
 
 /* ═══════════════════════════════════════════
-   RESPONSIVE
+   INTRO POPUP — REFINED
 ═══════════════════════════════════════════ */
+#intro-popup {
+  position: fixed; inset: 0; z-index: 99000;
+  background: #06000b;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  transition: transform 1.1s cubic-bezier(.76,0,.24,1), opacity .7s ease;
+  overflow: hidden;
+}
+#intro-popup.hide {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 배경 레이어들 */
+.intro-popup-bg {
+  position: absolute; inset: 0; pointer-events: none;
+}
+.intro-popup-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(232,0,45,.07) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 80% at 15% 50%, rgba(120,0,180,.04) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 80% at 85% 50%, rgba(120,0,180,.04) 0%, transparent 60%);
+}
+.intro-popup-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    -52deg,
+    transparent, transparent 48px,
+    rgba(232,0,45,.012) 48px, rgba(232,0,45,.012) 96px
+  );
+  animation: stripeMove 24s linear infinite;
+}
+
+/* 스캔라인 */
+.intro-scanline {
+  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 3px,
+    rgba(0,0,0,.06) 3px, rgba(0,0,0,.06) 4px
+  );
+}
+
+/* 코너 장식 */
+.intro-corner {
+  position: absolute;
+  width: 48px; height: 48px;
+  opacity: 0;
+  animation: introPhraseIn .5s ease 2.2s forwards;
+}
+.intro-corner--tl { top: 32px; left: 32px; border-top: 1.5px solid rgba(232,0,45,.5); border-left: 1.5px solid rgba(232,0,45,.5); }
+.intro-corner--tr { top: 32px; right: 32px; border-top: 1.5px solid rgba(232,0,45,.5); border-right: 1.5px solid rgba(232,0,45,.5); }
+.intro-corner--bl { bottom: 32px; left: 32px; border-bottom: 1.5px solid rgba(232,0,45,.5); border-left: 1.5px solid rgba(232,0,45,.5); }
+.intro-corner--br { bottom: 32px; right: 32px; border-bottom: 1.5px solid rgba(232,0,45,.5); border-right: 1.5px solid rgba(232,0,45,.5); }
+
+/* 가로선 */
+.intro-hline {
+  position: absolute; left: 80px; right: 80px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232,0,45,.25), transparent);
+  opacity: 0;
+  animation: introPhraseIn .6s ease 2s forwards;
+}
+.intro-hline--top { top: 80px; }
+.intro-hline--bot { bottom: 80px; }
+
+/* 중앙 내용 */
+.intro-inner {
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0;
+  position: relative; z-index: 2;
+  padding: 3rem 2rem;
+  width: 100%; max-width: 900px;
+}
+
+/* 상단 eyebrow */
+.intro-eyebrow {
+  font-family: var(--font-mono);
+  font-size: .58rem; letter-spacing: .5em;
+  color: rgba(232,0,45,.55);
+  text-transform: uppercase;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: introPhraseIn .6s ease .2s forwards;
+}
+
+/* 캐치프레이즈 영역 */
+.intro-catchphrase {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0;
+  width: 100%;
+}
+
+/* 영문 — 랜섬노트 */
+.ransom-line {
+  display: flex; flex-wrap: wrap;
+  justify-content: center; align-items: center;
+  gap: 3px; line-height: 1;
+  margin-bottom: 1.6rem;
+  opacity: 0;
+  animation: introPhraseIn .7s ease .4s forwards;
+}
+
+/* 랜섬 글자 공통 */
+.rc {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 900; line-height: 1;
+  position: relative;
+  transition: transform .2s ease, filter .2s ease;
+}
+.rc:hover { transform: rotate(0deg) scale(1.25) !important; filter: brightness(1.3); }
+
+.rc-box-r  { background: var(--red);   color: var(--black); padding: .04em .16em; }
+.rc-box-w  { background: var(--white); color: var(--black); padding: .04em .16em; }
+.rc-box-g  { background: var(--gold);  color: var(--black); padding: .04em .16em; }
+.rc-box-b  { background: #08000d; color: var(--white); padding: .04em .16em; border: 1.5px solid rgba(245,240,235,.7); }
+.rc-out    { color: transparent; -webkit-text-stroke: 1.5px var(--white); }
+.rc-out-r  { color: transparent; -webkit-text-stroke: 1.5px var(--red); }
+.rc-plain  { color: var(--white); }
+.rc-dim    { color: rgba(245,240,235,.5); }
+.rc-red    { color: var(--red); }
+.rc-gold   { color: var(--gold); }
+
+.rc-f1 { font-family: 'Archivo Black', sans-serif; font-style: italic; }
+.rc-f2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-style: normal; }
+.rc-f3 { font-family: 'Share Tech Mono', monospace; font-weight: 700; }
+.rc-f4 { font-family: 'Noto Serif KR', serif; font-weight: 700; }
+.rc-space { display: inline-block; width: .45em; }
+
+/* 일본어 — 가는 세리프, 중간 구분 */
+.intro-jp-wrap {
+  position: relative;
+  display: flex; align-items: center; gap: 1.4rem;
+  margin: .4rem 0 1.8rem;
+  opacity: 0;
+  animation: introPhraseIn .7s ease .9s forwards;
+}
+.intro-jp-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245,240,235,.12));
+}
+.intro-jp-line:last-child {
+  background: linear-gradient(90deg, rgba(245,240,235,.12), transparent);
+}
+.intro-phrase-jp {
+  font-family: var(--font-serif);
+  font-size: clamp(.75rem, 1.5vw, 1rem);
+  font-weight: 300;
+  color: rgba(245,240,235,.3);
+  letter-spacing: .18em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* 한국어 — 랜섬노트 (가장 크게) */
+#ransom-kr {
+  margin-bottom: 0;
+  opacity: 0;
+  animation: introPhraseIn .7s ease 1.3s forwards;
+}
+
+/* 붉은 강조선 */
+.intro-redline {
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, transparent 5%, var(--red) 30%, var(--red) 70%, transparent 95%);
+  margin: 1.8rem 0 2.4rem;
+  opacity: 0;
+  animation: introPhraseIn .5s ease 1.8s forwards;
+  position: relative;
+}
+.intro-redline::before,
+.intro-redline::after {
+  content: '';
+  position: absolute; top: 50%;
+  width: 6px; height: 6px;
+  background: var(--red);
+  transform: translateY(-50%) rotate(45deg);
+}
+.intro-redline::before { left: calc(30% - 3px); }
+.intro-redline::after  { right: calc(30% - 3px); }
+
+/* 버튼 */
+.intro-btn {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.25rem;
+  letter-spacing: .3em;
+  color: var(--black);
+  background: var(--red);
+  border: none;
+  padding: 1rem 4rem;
+  clip-path: polygon(16px 0, 100% 0, calc(100% - 16px) 100%, 0 100%);
+  cursor: none;
+  position: relative;
+  overflow: hidden;
+  transition: background .2s, transform .15s;
+  opacity: 0;
+  animation: introPhraseIn .6s ease 2s forwards;
+}
+.intro-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.15) 50%, transparent 100%);
+  transform: translateX(-100%);
+  transition: transform .5s ease;
+}
+.intro-btn:hover { background: var(--gold); transform: scale(1.04); }
+.intro-btn:hover::before { transform: translateX(100%); }
+
+/* 하단 mono */
+.intro-mono {
+  font-family: var(--font-mono);
+  font-size: .5rem; letter-spacing: .4em;
+  color: rgba(245,240,235,.12);
+  text-transform: uppercase;
+  margin-top: 2rem;
+  opacity: 0;
+  animation: introPhraseIn .5s ease 2.3s forwards;
+}
+
+@keyframes introPhraseIn {
+  from { opacity:0; transform: translateY(16px); }
+  to   { opacity:1; transform: none; }
+}
+
+/* ═══════════════════════════════════════════
+   SYMBOL FLASH SCREEN
+═══════════════════════════════════════════ */
+#symbol-flash {
+  position: fixed; inset: 0; z-index: 98000;
+  background: #000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s ease;
+}
+#symbol-flash.active { opacity: 1; pointer-events: all; }
+#symbol-flash.fadeout {
+  opacity: 0;
+  transition: opacity .8s ease;
+}
+
+.symbol-flash-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 70% at 50% 50%, #1a0000 0%, #000 70%);
+}
+
+.symbol-flash-img {
+  position: relative; z-index: 1;
+  width: min(80vw, 80vh);
+  height: auto;
+  opacity: 0;
+  transform: scale(.92);
+  transition: opacity .3s ease, transform .3s ease;
+}
+#symbol-flash.active .symbol-flash-img {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 점멸 화이트 오버레이 제거됨 */
 @media (max-width: 900px) {
   #hero { grid-template-columns: 1fr; }
   .hero-right { display: none; }
   .hero-left { padding: 4rem 2rem 4rem 2.5rem; }
-  #world, #characters, #factions { padding: 5rem 1.5rem; }
+  #world, #characters, #factions, #system { padding: 5rem 1.5rem; }
   .world-grid { grid-template-columns: 1fr; }
+  .hero-bottom { padding: 0 2rem 3rem; flex-direction: column; align-items: flex-start; }
+  .hero-bottom-right { width: 100%; }
 }
 
 @media (max-width: 768px) {
@@ -1643,6 +2061,53 @@ footer p {
 <body>
 
 <div id="cur"></div>
+
+<!-- ══════════════════════════════
+     INTRO POPUP
+══════════════════════════════ -->
+<div id="intro-popup">
+  <div class="intro-popup-bg"></div>
+  <div class="intro-scanline"></div>
+
+  <div class="intro-corner intro-corner--tl"></div>
+  <div class="intro-corner intro-corner--tr"></div>
+  <div class="intro-corner intro-corner--bl"></div>
+  <div class="intro-corner intro-corner--br"></div>
+  <div class="intro-hline intro-hline--top"></div>
+  <div class="intro-hline intro-hline--bot"></div>
+
+  <div class="intro-inner">
+
+    <div class="intro-eyebrow">// PHANTOM THIEVES CALLING CARD</div>
+
+    <div class="intro-catchphrase">
+      <div class="ransom-line" id="ransom-en"></div>
+
+      <div class="intro-jp-wrap">
+        <div class="intro-jp-line"></div>
+        <span class="intro-phrase-jp">お前は奴隸だ. 解放を望むか?</span>
+        <div class="intro-jp-line"></div>
+      </div>
+
+      <div class="ransom-line" id="ransom-kr"></div>
+    </div>
+
+    <div class="intro-redline"></div>
+
+    <button class="intro-btn" id="introBtn" onclick="closeIntro()">그렇다</button>
+
+    <div class="intro-mono">PERSONA 5 THE HOPE · CASE FILE 001 · CONFIDENTIAL</div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SYMBOL FLASH SCREEN
+══════════════════════════════ -->
+<div id="symbol-flash">
+  <div class="symbol-flash-bg"></div>
+  <img src="https://i.imgur.com/2EZ9E4r.png" class="symbol-flash-img" alt="P5H Symbol" id="symbolImg">
+</div>
 
 <!-- ══════════════════════════════
      NAV
@@ -1672,102 +2137,39 @@ footer p {
      HERO
 ══════════════════════════════ -->
 <section id="hero">
-  <div class="stripe-bg"></div>
 
-  <div class="hero-left">
+  <!-- 배너 이미지 -->
+  <img src="https://i.imgur.com/79CN4Mu.png" class="hero-banner-img" alt="Persona 5 The Hope Banner">
 
+  <!-- 스트라이프 오버레이 -->
+  <div class="stripe-bg" style="opacity:.3; z-index:1;"></div>
 
-    <!-- Calligraphy top -->
-    <svg class="calli-top" viewBox="0 0 260 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M10 20 Q30 5 50 20 Q70 35 90 20 Q110 5 130 20 Q150 35 170 20 Q190 5 210 20 Q230 35 250 20"
-            stroke="#e8002d" stroke-width="1.5" stroke-linecap="round" fill="none" opacity=".55"/>
-      <line x1="0" y1="20" x2="260" y2="20" stroke="#e8002d" stroke-width=".4" opacity=".18"/>
-      <circle cx="130" cy="20" r="2.8" fill="#e8002d" opacity=".45"/>
-      <path d="M115 20 L122 11 L130 20 L138 11 L145 20" stroke="#e8002d" stroke-width=".9" fill="none" opacity=".35"/>
-    </svg>
+  <!-- 하단 콘텐츠 -->
+  <div class="hero-bottom">
 
-    <h1 class="hero-title">
-      <span class="title-persona">PERSONA 5</span>
-      <span class="title-the">THE</span>
-      <span class="title-hope">HOPE</span>
-    </h1>
-
-    <!-- Calligraphy bottom -->
-    <svg class="calli-bot" viewBox="0 0 320 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <line x1="0" y1="18" x2="320" y2="18" stroke="#e8002d" stroke-width=".35" opacity=".18"/>
-      <path d="M0 18 C40 4, 80 32, 120 18 C160 4, 200 32, 240 18 C260 11, 280 25, 320 18"
-            stroke="#e8002d" stroke-width="1.1" fill="none" opacity=".45" stroke-linecap="round"/>
-      <path d="M145 8 Q160 18 145 28" stroke="#e8002d" stroke-width=".9" fill="none" opacity=".38"/>
-      <path d="M175 8 Q160 18 175 28" stroke="#e8002d" stroke-width=".9" fill="none" opacity=".38"/>
-      <circle cx="160" cy="18" r="2.2" fill="none" stroke="#e8002d" stroke-width=".9" opacity=".45"/>
-    </svg>
-
-    <p class="hero-tagline">
-      그것은 운명의 포로.<br>
-      부조리한 세상을 불태워 미래를 다시 만드는 이야기.
-    </p>
-
-    <a href="#world" class="hero-cta">세계관 탐색 ›</a>
-  </div>
-
-  <!-- Hero Right: HUD -->
-  <div class="hero-right">
-    <div class="hero-watermark" aria-hidden="true">P</div>
-
-    <!-- 장식 요소 -->
-    <div class="hero-deco">
-
-      <!-- 큰 장식 원 -->
-      <svg class="hero-deco-ring" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="200" cy="200" r="180" stroke="#e8002d" stroke-width=".6" opacity=".12"/>
-        <circle cx="200" cy="200" r="155" stroke="#e8002d" stroke-width=".4" opacity=".08"/>
-        <circle cx="200" cy="200" r="130" stroke="#e8002d" stroke-width="1" stroke-dasharray="4 8" opacity=".15" style="animation: ringRotate 20s linear infinite;"/>
-        <circle cx="200" cy="200" r="100" stroke="#e8002d" stroke-width=".5" opacity=".1"/>
-
-        <!-- 십자선 -->
-        <line x1="200" y1="20" x2="200" y2="380" stroke="#e8002d" stroke-width=".4" opacity=".1"/>
-        <line x1="20" y1="200" x2="380" y2="200" stroke="#e8002d" stroke-width=".4" opacity=".1"/>
-
-        <!-- 사선 -->
-        <line x1="72" y1="72" x2="328" y2="328" stroke="#e8002d" stroke-width=".3" opacity=".07"/>
-        <line x1="328" y1="72" x2="72" y2="328" stroke="#e8002d" stroke-width=".3" opacity=".07"/>
-
-        <!-- 포인트 마커 -->
-        <circle cx="200" cy="20" r="3" fill="#e8002d" opacity=".3"/>
-        <circle cx="200" cy="380" r="3" fill="#e8002d" opacity=".3"/>
-        <circle cx="20" cy="200" r="3" fill="#e8002d" opacity=".3"/>
-        <circle cx="380" cy="200" r="3" fill="#e8002d" opacity=".3"/>
-        <circle cx="200" cy="200" r="6" fill="none" stroke="#e8002d" stroke-width="1.5" opacity=".4"/>
-        <circle cx="200" cy="200" r="2" fill="#e8002d" opacity=".6"/>
-
-        <!-- 아크 장식 -->
-        <path d="M200 45 A155 155 0 0 1 355 200" stroke="#e8002d" stroke-width="1.5" opacity=".25" stroke-linecap="round"/>
-        <path d="M200 355 A155 155 0 0 1 45 200" stroke="#e8002d" stroke-width="1.5" opacity=".25" stroke-linecap="round"/>
-      </svg>
-
-      <!-- 중앙 텍스트 -->
-      <div class="hero-deco-center">
-        <div class="hero-deco-num">2026</div>
-        <div class="hero-deco-place">SEOUL</div>
-        <svg viewBox="0 0 160 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:160px; margin:.6rem auto 0;" aria-hidden="true">
-          <line x1="0" y1="6" x2="160" y2="6" stroke="#e8002d" stroke-width=".4" opacity=".3"/>
-          <path d="M55 6 L65 1 L80 6 L95 1 L105 6" stroke="#e8002d" stroke-width="1" fill="none" opacity=".5" stroke-linecap="round"/>
-          <circle cx="80" cy="6" r="1.8" fill="#e8002d" opacity=".5"/>
-        </svg>
-        <div class="hero-deco-genre">URBAN FANTASY</div>
-      </div>
-
-      <!-- 코너 장식 -->
-      <div class="hero-deco-corner hero-deco-corner--tl"></div>
-      <div class="hero-deco-corner hero-deco-corner--tr"></div>
-      <div class="hero-deco-corner hero-deco-corner--bl"></div>
-      <div class="hero-deco-corner hero-deco-corner--br"></div>
-
-      <!-- 사이드 라인 텍스트 -->
-      <div class="hero-deco-side hero-deco-side--left">PERSONA · 5 · THE · HOPE</div>
-      <div class="hero-deco-side hero-deco-side--right">괴이담화동아리 · 괴담동</div>
-
+    <div class="hero-bottom-left">
+      <p class="hero-tagline">
+        그것은 운명의 포로.<br>
+        부조리한 세상을 불태워 미래를 다시 만드는 이야기.
+      </p>
+      <a href="#world" class="hero-cta">세계관 탐색 ›</a>
     </div>
+
+    <div class="hero-bottom-right">
+      <div class="hero-info-row">
+        <span class="hero-info-label">배경</span>
+        <span class="hero-info-val">SEOUL · 2026</span>
+      </div>
+      <div class="hero-info-row">
+        <span class="hero-info-label">장르</span>
+        <span class="hero-info-val">URBAN FANTASY</span>
+      </div>
+      <div class="hero-info-row">
+        <span class="hero-info-label">STATUS</span>
+        <span class="hero-info-val">IN PROGRESS</span>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -2415,6 +2817,135 @@ footer p {
      SCRIPTS
 ══════════════════════════════ -->
 <script>
+/* ── RANSOM NOTE TYPOGRAPHY ── */
+(function() {
+  // 영문 설정
+  const enWords = [
+    { chars: 'You',  sizes: [3.2, 2.4, 2.8], styles: ['rc-box-r rc-f1','rc-plain rc-f2','rc-box-w rc-f1'], rotates: [-4, 2, -2] },
+    { chars: 'are',  sizes: [2.2, 2.8, 2.0], styles: ['rc-dim rc-f3','rc-out rc-f1','rc-red rc-f2'], rotates: [3, -3, 5] },
+    { chars: 'slave', sizes: [3.5, 2.6, 3.0, 2.4, 3.2], styles: ['rc-box-b rc-f1','rc-red rc-f2','rc-box-r rc-f1','rc-out-r rc-f3','rc-gold rc-f1'], rotates: [-5, 3, -2, 4, -3] },
+    { chars: 'Want', sizes: [2.8, 2.2, 3.0, 2.5], styles: ['rc-plain rc-f2','rc-box-g rc-f1','rc-dim rc-f3','rc-red rc-f1'], rotates: [2, -4, 3, -2] },
+    { chars: 'emancipation', sizes: [2.0,2.6,2.2,2.8,2.0,2.4,2.6,2.2,3.0,2.4,2.0,2.6], styles: ['rc-box-r rc-f1','rc-plain rc-f2','rc-box-w rc-f1','rc-out rc-f3','rc-red rc-f1','rc-box-b rc-f2','rc-gold rc-f1','rc-dim rc-f3','rc-box-r rc-f1','rc-plain rc-f2','rc-out-r rc-f1','rc-red rc-f3'], rotates: [-3,4,-2,5,-3,2,-4,3,-2,4,-3,2] },
+  ];
+
+  // 한글 설정
+  const krChars = [
+    { ch: '너', size: 3.5, style: 'rc-box-r rc-f1', rot: -4 },
+    { ch: '는', size: 2.8, style: 'rc-out-r rc-f4', rot: 3 },
+    { ch: ' ', size: 0, style: '', rot: 0 },
+    { ch: '노', size: 3.2, style: 'rc-box-b rc-f4', rot: -3 },
+    { ch: '예', size: 3.8, style: 'rc-red rc-f1', rot: 5 },
+    { ch: '다', size: 2.6, style: 'rc-plain rc-f4', rot: -2 },
+    { ch: '.', size: 2.4, style: 'rc-gold rc-f2', rot: 4 },
+    { ch: ' ', size: 0, style: '', rot: 0 },
+    { ch: '해', size: 3.0, style: 'rc-box-r rc-f4', rot: -5 },
+    { ch: '방', size: 3.4, style: 'rc-out rc-f1', rot: 3 },
+    { ch: '을', size: 2.5, style: 'rc-dim rc-f4', rot: -2 },
+    { ch: ' ', size: 0, style: '', rot: 0 },
+    { ch: '원', size: 3.2, style: 'rc-box-w rc-f4', rot: 4 },
+    { ch: '하', size: 2.8, style: 'rc-red rc-f1', rot: -3 },
+    { ch: '나', size: 3.6, style: 'rc-box-r rc-f4', rot: 5 },
+    { ch: '?', size: 3.0, style: 'rc-gold rc-f2', rot: -4 },
+  ];
+
+  function buildEnLine() {
+    const el = document.getElementById('ransom-en');
+    if (!el) return;
+    enWords.forEach((word, wi) => {
+      if (wi > 0) {
+        // 줄바꿈: slave 뒤에
+        if (wi === 3) {
+          const br = document.createElement('div');
+          br.style.cssText = 'width:100%; height:.3rem;';
+          el.appendChild(br);
+        } else {
+          const sp = document.createElement('span');
+          sp.className = 'rc-space';
+          el.appendChild(sp);
+        }
+      }
+      word.chars.split('').forEach((ch, ci) => {
+        const span = document.createElement('span');
+        const fontSize = (word.sizes[ci] || 2.4) + 'rem';
+        const cls = word.styles[ci] || 'rc-plain rc-f1';
+        const rot = word.rotates[ci] || 0;
+        span.className = 'rc ' + cls;
+        span.textContent = ch;
+        span.style.cssText = `font-size:${fontSize}; transform:rotate(${rot}deg); animation-delay:${(wi*0.15 + ci*0.04).toFixed(2)}s;`;
+        el.appendChild(span);
+      });
+    });
+    // ? 추가
+    const q = document.createElement('span');
+    q.className = 'rc rc-box-r rc-f1';
+    q.textContent = '?';
+    q.style.cssText = 'font-size:2.8rem; transform:rotate(-5deg);';
+    el.appendChild(q);
+  }
+
+  function buildKrLine() {
+    const el = document.getElementById('ransom-kr');
+    if (!el) return;
+    krChars.forEach((item, i) => {
+      if (item.ch === ' ') {
+        const sp = document.createElement('span');
+        sp.className = 'rc-space';
+        el.appendChild(sp);
+        return;
+      }
+      const span = document.createElement('span');
+      span.className = 'rc ' + item.style;
+      span.textContent = item.ch;
+      span.style.cssText = `font-size:${item.size}rem; transform:rotate(${item.rot}deg); animation-delay:${(i*0.06).toFixed(2)}s;`;
+      el.appendChild(span);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    buildEnLine();
+    buildKrLine();
+  });
+})();
+
+/* ── INTRO POPUP ── */
+const symbolFlash = document.getElementById('symbol-flash');
+
+function closeIntro() {
+  const popup = document.getElementById('intro-popup');
+
+  // 1. 심볼 플래시를 즉시 최상위에 띄움
+  symbolFlash.style.zIndex = '99500';
+  symbolFlash.classList.add('active');
+
+  // 2. 인트로 팝업 슬라이드 아웃
+  setTimeout(() => {
+    popup.classList.add('hide');
+    setTimeout(() => { popup.style.display = 'none'; }, 950);
+  }, 80);
+
+  // 3. 2초 머무르다 페이드아웃
+  setTimeout(() => {
+    symbolFlash.classList.add('fadeout');
+
+    // BGM 음소거 해제
+    if (ytPlayer && bgmReady) {
+      ytPlayer.unMute();
+      ytPlayer.setVolume(parseInt(volumeSlider.value));
+      bgmMuted = false;
+      bgmBtn.textContent = '♪ BGM ON';
+      bgmBtn.classList.add('playing');
+    }
+
+    setTimeout(() => { symbolFlash.style.display = 'none'; }, 850);
+
+  }, 2200);
+}
+
+// 인트로 버튼 커서
+const introBtn = document.getElementById('introBtn');
+introBtn.addEventListener('mouseenter', () => cur.classList.add('big'));
+introBtn.addEventListener('mouseleave', () => cur.classList.remove('big'));
+
 /* ── CURSOR ── */
 const cur = document.getElementById('cur');
 let curX = 0, curY = 0, aimX = 0, aimY = 0;
@@ -2533,7 +3064,6 @@ const revealObs = new IntersectionObserver(entries => {
 document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
 /* ── BGM (YouTube IFrame API) ── */
-// 숨겨진 유튜브 플레이어 컨테이너
 const ytContainer = document.createElement('div');
 ytContainer.id = 'yt-player';
 ytContainer.style.cssText = 'position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;bottom:0;left:0;';
@@ -2542,9 +3072,9 @@ document.body.appendChild(ytContainer);
 let ytPlayer = null;
 let bgmReady = false;
 let bgmPlaying = false;
+let bgmMuted = true;
 const bgmBtn = document.getElementById('bgmBtn');
 
-// YouTube IFrame API 로드
 const ytScript = document.createElement('script');
 ytScript.src = 'https://www.youtube.com/iframe_api';
 document.head.appendChild(ytScript);
@@ -2553,20 +3083,30 @@ window.onYouTubeIframeAPIReady = function() {
   ytPlayer = new YT.Player('yt-player', {
     videoId: 'hWhgrA2dhrk',
     playerVars: {
-      autoplay: 0,
+      autoplay: 1,
       loop: 1,
       playlist: 'hWhgrA2dhrk',
       controls: 0,
       disablekb: 1,
       fs: 0,
       modestbranding: 1,
+      mute: 1,
     },
     events: {
-      onReady: () => { bgmReady = true; },
+      onReady: (e) => {
+        bgmReady = true;
+        e.target.mute();
+        e.target.setVolume(30);
+        e.target.playVideo();
+        // 음소거 상태임을 버튼에 표시
+        bgmBtn.textContent = '♪ BGM (음소거)';
+        bgmBtn.classList.add('playing');
+        bgmPlaying = true;
+      },
       onStateChange: (e) => {
         if (e.data === YT.PlayerState.PLAYING) {
           bgmPlaying = true;
-          bgmBtn.textContent = '♪ BGM ON';
+          bgmBtn.textContent = bgmMuted ? '♪ BGM (음소거)' : '♪ BGM ON';
           bgmBtn.classList.add('playing');
         } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
           bgmPlaying = false;
@@ -2580,11 +3120,20 @@ window.onYouTubeIframeAPIReady = function() {
 
 function toggleBGM() {
   if (!bgmReady || !ytPlayer) return;
-  if (bgmPlaying) {
+  if (bgmMuted) {
+    // 음소거 해제
+    ytPlayer.unMute();
+    ytPlayer.setVolume(parseInt(volumeSlider.value));
+    bgmMuted = false;
+    bgmBtn.textContent = '♪ BGM ON';
+  } else if (bgmPlaying) {
     ytPlayer.pauseVideo();
+    bgmBtn.textContent = '♪ BGM';
+    bgmBtn.classList.remove('playing');
   } else {
-    ytPlayer.setVolume(30);
     ytPlayer.playVideo();
+    bgmBtn.textContent = '♪ BGM ON';
+    bgmBtn.classList.add('playing');
   }
 }
 
@@ -2599,7 +3148,14 @@ const volumeVal    = document.getElementById('volumeVal');
 volumeSlider.addEventListener('input', () => {
   const v = parseInt(volumeSlider.value);
   volumeVal.textContent = v;
-  if (ytPlayer && bgmReady) ytPlayer.setVolume(v);
+  if (ytPlayer && bgmReady) {
+    if (bgmMuted) {
+      ytPlayer.unMute();
+      bgmMuted = false;
+      bgmBtn.textContent = '♪ BGM ON';
+    }
+    ytPlayer.setVolume(v);
+  }
 });
 
 volumeSlider.addEventListener('mouseenter', () => cur.classList.add('big'));
