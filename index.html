@@ -161,6 +161,33 @@ nav {
 .nav-links a:hover { color: var(--white); }
 .nav-links a:hover::after { transform: scaleX(1); }
 
+.nav-bgm-btn {
+  font-family: var(--font-mono);
+  font-size: .68rem; letter-spacing: .18em;
+  color: rgba(245,240,235,.45);
+  background: none; border: 1px solid rgba(232,0,45,.25);
+  padding: .4rem .9rem;
+  cursor: none;
+  transition: color .2s, border-color .2s, background .2s;
+  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  white-space: nowrap;
+}
+.nav-bgm-btn:hover {
+  color: var(--white);
+  border-color: var(--red);
+  background: rgba(232,0,45,.1);
+}
+.nav-bgm-btn.playing {
+  color: var(--red);
+  border-color: var(--red);
+  background: rgba(232,0,45,.08);
+  animation: bgmPulse 2s ease-in-out infinite;
+}
+@keyframes bgmPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(232,0,45,0); }
+  50%      { box-shadow: 0 0 8px 2px rgba(232,0,45,.2); }
+}
+
 /* ═══════════════════════════════════════════
    HERO
 ═══════════════════════════════════════════ */
@@ -1583,6 +1610,7 @@ footer p {
     <li><a href="#system">시스템</a></li>
     <li><a href="#factions">세력도</a></li>
     <li><a href="#characters">CO-OP</a></li>
+    <li><button id="bgmBtn" class="nav-bgm-btn" onclick="toggleBGM()" aria-label="BGM 재생/정지">♪ BGM</button></li>
   </ul>
 </nav>
 
@@ -2450,7 +2478,67 @@ const revealObs = new IntersectionObserver(entries => {
 
 document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
-/* ── STAT BAR ANIMATION ── */
+/* ── BGM (YouTube IFrame API) ── */
+// 숨겨진 유튜브 플레이어 컨테이너
+const ytContainer = document.createElement('div');
+ytContainer.id = 'yt-player';
+ytContainer.style.cssText = 'position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;bottom:0;left:0;';
+document.body.appendChild(ytContainer);
+
+let ytPlayer = null;
+let bgmReady = false;
+let bgmPlaying = false;
+const bgmBtn = document.getElementById('bgmBtn');
+
+// YouTube IFrame API 로드
+const ytScript = document.createElement('script');
+ytScript.src = 'https://www.youtube.com/iframe_api';
+document.head.appendChild(ytScript);
+
+window.onYouTubeIframeAPIReady = function() {
+  ytPlayer = new YT.Player('yt-player', {
+    videoId: 'hWhgrA2dhrk',
+    playerVars: {
+      autoplay: 0,
+      loop: 1,
+      playlist: 'hWhgrA2dhrk',
+      controls: 0,
+      disablekb: 1,
+      fs: 0,
+      modestbranding: 1,
+    },
+    events: {
+      onReady: () => { bgmReady = true; },
+      onStateChange: (e) => {
+        if (e.data === YT.PlayerState.PLAYING) {
+          bgmPlaying = true;
+          bgmBtn.textContent = '♪ BGM ON';
+          bgmBtn.classList.add('playing');
+        } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
+          bgmPlaying = false;
+          bgmBtn.textContent = '♪ BGM';
+          bgmBtn.classList.remove('playing');
+        }
+      }
+    }
+  });
+};
+
+function toggleBGM() {
+  if (!bgmReady || !ytPlayer) return;
+  if (bgmPlaying) {
+    ytPlayer.pauseVideo();
+  } else {
+    ytPlayer.setVolume(60);
+    ytPlayer.playVideo();
+  }
+}
+
+// BGM 버튼도 커서 big 처리
+bgmBtn.addEventListener('mouseenter', () => cur.classList.add('big'));
+bgmBtn.addEventListener('mouseleave', () => cur.classList.remove('big'));
+
+
 const statObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting) {
