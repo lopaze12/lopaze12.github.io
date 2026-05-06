@@ -161,6 +161,12 @@ nav {
 .nav-links a:hover { color: var(--white); }
 .nav-links a:hover::after { transform: scaleX(1); }
 
+.nav-bgm-group {
+  display: flex; align-items: center; gap: .6rem;
+  padding: 0 1.2rem;
+  border-right: 1px solid rgba(232,0,45,.15);
+}
+
 .nav-bgm-btn {
   font-family: var(--font-mono);
   font-size: .68rem; letter-spacing: .18em;
@@ -1646,17 +1652,19 @@ footer p {
     <div class="nav-brand-p">P5H</div>
     <div class="nav-brand-sub">PERSONA 5<br>THE HOPE</div>
   </a>
+  <div class="nav-bgm-group">
+    <button id="bgmBtn" class="nav-bgm-btn" onclick="toggleBGM()" aria-label="BGM 재생/정지">♪ BGM</button>
+    <div class="nav-volume-wrap">
+      <span class="nav-volume-icon">🔈</span>
+      <input type="range" id="volumeSlider" class="nav-volume-slider" min="0" max="100" value="30" aria-label="볼륨 조절">
+      <span class="nav-volume-val" id="volumeVal">30</span>
+    </div>
+  </div>
   <ul class="nav-links">
     <li><a href="#world">세계관</a></li>
     <li><a href="#system">시스템</a></li>
     <li><a href="#factions">세력도</a></li>
     <li><a href="#characters">CO-OP</a></li>
-    <li><button id="bgmBtn" class="nav-bgm-btn" onclick="toggleBGM()" aria-label="BGM 재생/정지">♪ BGM</button></li>
-    <li class="nav-volume-wrap">
-      <span class="nav-volume-icon">🔈</span>
-      <input type="range" id="volumeSlider" class="nav-volume-slider" min="0" max="100" value="30" aria-label="볼륨 조절">
-      <span class="nav-volume-val" id="volumeVal">30</span>
-    </li>
   </ul>
 </nav>
 
