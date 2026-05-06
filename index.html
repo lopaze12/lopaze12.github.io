@@ -302,7 +302,15 @@ nav {
 .hero-tagline {
   font-family: var(--font-serif);
   font-size: 1rem; font-weight: 300;
-  line-height: 2.1; color: rgba(245,240,235,.55);
+  line-height: 2.1;
+  color: #ffffff;
+  text-shadow:
+    -2px -2px 0 #000,
+     2px -2px 0 #000,
+    -2px  2px 0 #000,
+     2px  2px 0 #000,
+     0    0   8px rgba(0,0,0,.9),
+     0    0  16px rgba(0,0,0,.7);
   opacity: 0;
   animation: fadeUp .6s ease .6s forwards;
 }
@@ -1166,11 +1174,13 @@ footer p {
 ═══════════════════════════════════════════ */
 #system {
   padding: 8rem 4rem;
-  background: var(--grey);
+  background:
+    linear-gradient(to bottom, rgba(8,0,13,.75) 0%, rgba(8,0,13,.6) 40%, rgba(8,0,13,.85) 100%),
+    url('https://i.imgur.com/1cmFNek.png') center center / cover no-repeat;
   border-top: 2px solid var(--red);
   position: relative; overflow: hidden;
 }
-#system .stripe-bg { opacity: .25; }
+#system .stripe-bg { opacity: .1; }
 
 .sys-layout {
   display: grid;
@@ -2121,8 +2131,8 @@ footer p {
     <button id="bgmBtn" class="nav-bgm-btn" onclick="toggleBGM()" aria-label="BGM 재생/정지">♪ BGM</button>
     <div class="nav-volume-wrap">
       <span class="nav-volume-icon">🔈</span>
-      <input type="range" id="volumeSlider" class="nav-volume-slider" min="0" max="100" value="30" aria-label="볼륨 조절">
-      <span class="nav-volume-val" id="volumeVal">30</span>
+      <input type="range" id="volumeSlider" class="nav-volume-slider" min="0" max="100" value="10" aria-label="볼륨 조절">
+      <span class="nav-volume-val" id="volumeVal">10</span>
     </div>
   </div>
   <ul class="nav-links">
@@ -3096,7 +3106,7 @@ window.onYouTubeIframeAPIReady = function() {
       onReady: (e) => {
         bgmReady = true;
         e.target.mute();
-        e.target.setVolume(30);
+        e.target.setVolume(10);
         e.target.playVideo();
         // 음소거 상태임을 버튼에 표시
         bgmBtn.textContent = '♪ BGM (음소거)';
