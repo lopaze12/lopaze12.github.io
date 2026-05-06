@@ -188,6 +188,47 @@ nav {
   50%      { box-shadow: 0 0 8px 2px rgba(232,0,45,.2); }
 }
 
+.nav-volume-wrap {
+  display: flex; align-items: center; gap: .5rem;
+  padding: 0 .5rem;
+}
+.nav-volume-icon {
+  font-size: .75rem; opacity: .5;
+  user-select: none;
+}
+.nav-volume-val {
+  font-family: var(--font-mono);
+  font-size: .55rem; letter-spacing: .1em;
+  color: rgba(245,240,235,.35);
+  min-width: 22px; text-align: right;
+}
+.nav-volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 72px; height: 3px;
+  background: rgba(232,0,45,.2);
+  border-radius: 0;
+  outline: none;
+  cursor: none;
+  transition: background .2s;
+}
+.nav-volume-slider:hover { background: rgba(232,0,45,.35); }
+.nav-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px; height: 10px;
+  background: var(--red);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  cursor: none;
+  transition: transform .15s;
+}
+.nav-volume-slider::-webkit-slider-thumb:hover { transform: scale(1.3); }
+.nav-volume-slider::-moz-range-thumb {
+  width: 10px; height: 10px;
+  background: var(--red);
+  border: none; border-radius: 0;
+  cursor: none;
+}
+
 /* ═══════════════════════════════════════════
    HERO
 ═══════════════════════════════════════════ */
@@ -1611,6 +1652,11 @@ footer p {
     <li><a href="#factions">세력도</a></li>
     <li><a href="#characters">CO-OP</a></li>
     <li><button id="bgmBtn" class="nav-bgm-btn" onclick="toggleBGM()" aria-label="BGM 재생/정지">♪ BGM</button></li>
+    <li class="nav-volume-wrap">
+      <span class="nav-volume-icon">🔈</span>
+      <input type="range" id="volumeSlider" class="nav-volume-slider" min="0" max="100" value="30" aria-label="볼륨 조절">
+      <span class="nav-volume-val" id="volumeVal">30</span>
+    </li>
   </ul>
 </nav>
 
@@ -2537,6 +2583,19 @@ function toggleBGM() {
 // BGM 버튼도 커서 big 처리
 bgmBtn.addEventListener('mouseenter', () => cur.classList.add('big'));
 bgmBtn.addEventListener('mouseleave', () => cur.classList.remove('big'));
+
+// 볼륨 슬라이더
+const volumeSlider = document.getElementById('volumeSlider');
+const volumeVal    = document.getElementById('volumeVal');
+
+volumeSlider.addEventListener('input', () => {
+  const v = parseInt(volumeSlider.value);
+  volumeVal.textContent = v;
+  if (ytPlayer && bgmReady) ytPlayer.setVolume(v);
+});
+
+volumeSlider.addEventListener('mouseenter', () => cur.classList.add('big'));
+volumeSlider.addEventListener('mouseleave', () => cur.classList.remove('big'));
 
 
 const statObs = new IntersectionObserver(entries => {
