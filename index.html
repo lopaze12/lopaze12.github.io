@@ -2049,7 +2049,7 @@ footer p {
 /* hero는 flex 레이아웃 유지 */
 #hero.tab-panel.active { display: flex; }
 
-/* ─── 탭 트랜지션 오버레이 (Joker WebP) ─── */
+/* ─── 탭 트랜지션 오버레이 (Joker GIF) ─── */
 .tab-transition {
   position: fixed; inset: 0;
   z-index: 50000;
@@ -2057,74 +2057,25 @@ footer p {
   display: flex; align-items: center; justify-content: center;
   opacity: 0;
   background: rgba(8,0,13,0);
-  transition: background .25s ease;
+  transition: background .25s ease, opacity .3s ease;
 }
 .tab-transition.active {
   pointer-events: all;
   opacity: 1;
-  background: rgba(8,0,13,.55);
+  background: rgba(8,0,13,.85);
 }
 
 .tab-transition-img {
-  max-width: 75vw;
-  max-height: 75vh;
-  width: auto; height: auto;
-  filter: drop-shadow(0 0 40px rgba(232,0,45,.4)) drop-shadow(0 0 80px rgba(0,0,0,.6));
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
   opacity: 0;
-  transform: scale(.92);
-  transition: opacity .15s ease, transform .25s ease;
+  transition: opacity .15s ease;
 }
 .tab-transition.active .tab-transition-img {
   opacity: 1;
-  transform: scale(1);
-}
-
-/* ─── 유리창 깨짐 효과 ─── */
-.glass-shatter {
-  position: fixed; inset: 0;
-  z-index: 49000;
-  pointer-events: none;
-  perspective: 1200px;
-}
-.glass-shard {
-  position: absolute;
-  background-size: cover;
-  background-position: center;
-  transform-origin: center;
-  will-change: transform, opacity;
-  /* 빨간 깨짐 가장자리 */
-  box-shadow:
-    inset 0 0 0 1px rgba(232,0,45,.4),
-    0 0 20px rgba(0,0,0,.7);
-}
-
-@keyframes shardFly {
-  0% {
-    opacity: 1;
-    transform: translate3d(0,0,0) rotate(0deg);
-  }
-  100% {
-    opacity: 0;
-    transform: translate3d(var(--tx, 0), var(--ty, 0), var(--tz, 0))
-               rotate(var(--rot, 0deg));
-  }
-}
-
-/* 균열선 SVG 오버레이 */
-.crack-overlay {
-  position: fixed; inset: 0;
-  z-index: 49500;
-  pointer-events: none;
-  opacity: 0;
-}
-.crack-overlay.show {
-  animation: crackFlash .55s ease forwards;
-}
-@keyframes crackFlash {
-  0%   { opacity: 0; }
-  20%  { opacity: 1; }
-  60%  { opacity: 1; }
-  100% { opacity: 0; }
 }
 
 /* ═══════════════════════════════════════════
@@ -2197,42 +2148,6 @@ footer p {
 <!-- ══════════════════════════════
      TAB TRANSITION OVERLAY
 ══════════════════════════════ -->
-<div class="glass-shatter" id="glassShatter"></div>
-<svg class="crack-overlay" id="crackOverlay" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <defs>
-    <filter id="cracker">
-      <feTurbulence type="fractalNoise" baseFrequency=".02" numOctaves="2" seed="3"/>
-      <feDisplacementMap in="SourceGraphic" scale="1.5"/>
-    </filter>
-  </defs>
-  <g stroke="white" stroke-width=".15" fill="none" opacity=".95" filter="url(#cracker)">
-    <!-- 중심에서 뻗어나가는 균열 -->
-    <line x1="50" y1="50" x2="0"   y2="20"/>
-    <line x1="50" y1="50" x2="15"  y2="0"/>
-    <line x1="50" y1="50" x2="40"  y2="0"/>
-    <line x1="50" y1="50" x2="68"  y2="0"/>
-    <line x1="50" y1="50" x2="100" y2="12"/>
-    <line x1="50" y1="50" x2="100" y2="48"/>
-    <line x1="50" y1="50" x2="100" y2="78"/>
-    <line x1="50" y1="50" x2="80"  y2="100"/>
-    <line x1="50" y1="50" x2="55"  y2="100"/>
-    <line x1="50" y1="50" x2="25"  y2="100"/>
-    <line x1="50" y1="50" x2="0"   y2="85"/>
-    <line x1="50" y1="50" x2="0"   y2="55"/>
-    <!-- 가지치기 -->
-    <line x1="22" y1="30" x2="8"   y2="42"/>
-    <line x1="22" y1="30" x2="30"  y2="14"/>
-    <line x1="78" y1="32" x2="92"  y2="22"/>
-    <line x1="78" y1="32" x2="68"  y2="18"/>
-    <line x1="75" y1="68" x2="92"  y2="78"/>
-    <line x1="75" y1="68" x2="65"  y2="84"/>
-    <line x1="28" y1="72" x2="12"  y2="80"/>
-    <line x1="28" y1="72" x2="38"  y2="88"/>
-  </g>
-  <!-- 중심 충격점 -->
-  <circle cx="50" cy="50" r="1.2" fill="white" opacity=".9"/>
-</svg>
-
 <div class="tab-transition" id="tabTransition">
   <img src="https://i.imgur.com/RXaYw8w.gif" class="tab-transition-img" id="tabTransitionImg" alt="">
 </div>
@@ -3227,79 +3142,12 @@ document.querySelectorAll('.fc-member[data-mid]').forEach(el => {
   el.addEventListener('mouseleave', () => cur.classList.remove('big'));
 });
 
-/* ── TAB SWITCHING WITH GLASS SHATTER + JOKER TRANSITION ── */
+/* ── TAB SWITCHING WITH JOKER TRANSITION ── */
 const tabTransition    = document.getElementById('tabTransition');
 const tabTransitionImg = document.getElementById('tabTransitionImg');
-const glassShatter     = document.getElementById('glassShatter');
-const crackOverlay     = document.getElementById('crackOverlay');
 const TRANSITION_SRC   = 'https://i.imgur.com/RXaYw8w.gif';
 
 let isTransitioning = false;
-
-/* 유리 조각 생성 */
-function createGlassShards() {
-  glassShatter.innerHTML = '';
-  const W = window.innerWidth;
-  const H = window.innerHeight;
-  const cx = W / 2, cy = H / 2;
-
-  // 그리드 + 무작위 변형으로 조각 만들기
-  const cols = 7, rows = 5;
-  const cw = W / cols, rh = H / rows;
-
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      const x = c * cw;
-      const y = r * rh;
-      // 조각 크기 변동
-      const w = cw + (Math.random() * 20 - 10);
-      const h = rh + (Math.random() * 20 - 10);
-
-      const shard = document.createElement('div');
-      shard.className = 'glass-shard';
-      shard.style.left  = x + 'px';
-      shard.style.top   = y + 'px';
-      shard.style.width = w + 'px';
-      shard.style.height= h + 'px';
-
-      // 불규칙 다각형 clip-path (유리 조각 모양)
-      const p1x = (Math.random() * 15);
-      const p1y = (Math.random() * 15);
-      const p2x = 100 - (Math.random() * 15);
-      const p2y = (Math.random() * 15);
-      const p3x = 100 - (Math.random() * 15);
-      const p3y = 100 - (Math.random() * 15);
-      const p4x = (Math.random() * 15);
-      const p4y = 100 - (Math.random() * 15);
-      shard.style.clipPath = `polygon(${p1x}% ${p1y}%, ${p2x}% ${p2y}%, ${p3x}% ${p3y}%, ${p4x}% ${p4y}%)`;
-
-      // 중심에서 멀어지는 방향 계산
-      const dx = (x + w/2) - cx;
-      const dy = (y + h/2) - cy;
-      const dist = Math.sqrt(dx*dx + dy*dy) || 1;
-      const force = 200 + Math.random() * 400;
-      const tx = (dx / dist) * force;
-      const ty = (dy / dist) * force - (50 + Math.random() * 80); // 살짝 위로 튀어오름
-      const tz = -300 - Math.random() * 400;
-      const rot = (Math.random() - .5) * 720;
-
-      shard.style.setProperty('--tx', tx + 'px');
-      shard.style.setProperty('--ty', ty + 'px');
-      shard.style.setProperty('--tz', tz + 'px');
-      shard.style.setProperty('--rot', rot + 'deg');
-
-      // 검은 반투명 배경 (현재 화면을 흉내내는 어두운 톤)
-      shard.style.background = `linear-gradient(${Math.random()*360}deg, rgba(8,0,13,.85), rgba(26,0,40,.7))`;
-
-      // 애니메이션 (각 조각마다 약간 다른 딜레이)
-      const delay = Math.random() * 60;
-      const duration = 600 + Math.random() * 200;
-      shard.style.animation = `shardFly ${duration}ms cubic-bezier(.4,.05,.6,1) ${delay}ms forwards`;
-
-      glassShatter.appendChild(shard);
-    }
-  }
-}
 
 function actuallySwitchTab(tabId) {
   document.querySelectorAll('.tab-panel').forEach(p => {
@@ -3328,37 +3176,24 @@ function switchTab(tabId) {
   if (isTransitioning) return;
   isTransitioning = true;
 
-  // 1. 균열선 플래시 (충격 순간)
-  crackOverlay.classList.remove('show');
-  void crackOverlay.offsetWidth; // reflow 강제
-  crackOverlay.classList.add('show');
+  // 1. 조커 GIF 등장 (캐시버스터로 처음부터 재생)
+  tabTransitionImg.src = TRANSITION_SRC + '?t=' + Date.now();
+  tabTransition.classList.add('active');
 
-  // 2. 살짝 뒤에 유리 깨짐
-  setTimeout(() => {
-    createGlassShards();
-  }, 80);
-
-  // 3. 조커 GIF 등장 (깨짐 거의 끝나갈 때)
-  setTimeout(() => {
-    tabTransitionImg.src = TRANSITION_SRC + '?t=' + Date.now();
-    tabTransition.classList.add('active');
-  }, 500);
-
-  // 4. 콘텐츠 교체
+  // 2. 콘텐츠 교체 (조커가 화면을 가린 시점)
   setTimeout(() => {
     actuallySwitchTab(tabId);
-  }, 700);
+  }, 350);
 
-  // 5. 오버레이 페이드아웃
+  // 3. 오버레이 페이드아웃
   setTimeout(() => {
     tabTransition.classList.remove('active');
-    glassShatter.innerHTML = '';
-  }, 1100);
+  }, 800);
 
-  // 6. 락 해제
+  // 4. 락 해제
   setTimeout(() => {
     isTransitioning = false;
-  }, 1300);
+  }, 1000);
 }
 
 // 초기 상태 설정
